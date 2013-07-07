@@ -8,7 +8,7 @@ from google.appengine.ext import ndb
 
 LOCATION_NAME = 'arduino'
 
-PAGE_HEAD = '<!DOCTYPE html><html><head><title>GPS Tracking</title><meta name="viewport" content="width=device-width, initial-scale=1.0"><!-- Bootstrap --><link href="http://localhost:9000/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen"></head>'
+PAGE_HEAD = '<!DOCTYPE html><html><head><title>GPS Tracking</title></head>'
 
 
 def location_key(location_name=LOCATION_NAME):
@@ -58,20 +58,12 @@ class Current_Location(webapp2.RequestHandler):
                 connect_status = "The device is connected and updating location every 20 Seconds.Last location is from <b>%s Minutes and %s Seconds </b>Ago" % (int(elapsed_time[0]), int(elapsed_time[1]))
             map_url = 'https://maps.google.com/maps?q=%s,+%s&amp;ie=UTF8&amp;t=h&amp;z=19&amp;output=embed'% (loc[0].lat, loc[0].lng)
             self.response.write(PAGE_HEAD + "<body><center><h1>Tracker Position</h1><u>Last Updated<b> %s Minutes, %s Seconds ago </b><br>@ %s<br><br>"% (int(elapsed_time[0]), int(elapsed_time[1]), timeist.strftime('%a, %d, %b %Y at %I:%M:%S %p')))
-            self.response.write('<iframe width="700" height="500" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="%s"></iframe>   <script src="http://code.jquery.com/jquery.js"></script><script src="http://localhost:9000/bootstrap/js/bootstrap.min.js"></script>' % (map_url))
-            self.response.write('<br><b>Device Status</b>:%s </center></body></html>' % (connect_status))
+            self.response.write("""<iframe width="700" height="500" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="%s"></iframe>   
+                                    <br><b>Device Status</b>:%s </center></body></html>""" % (map_url, connect_status))
         else:
-            self.response.write('<h1>empty</h1>')
-
-"""class Clean(webapp2.Requesthandler):
-    def get(self):
-        location_query = Location.query(ancestor=location_key(LOCATION_NAME)).order(Location.created)
-        loc = location.query.fetch()
-
+            self.response.write('<h1>No location data yet.</h1>')
 
 app = webapp2.WSGIApplication([
     ('/update', Update),
-    ('/clean_data', Clean),
-    ()
     ('/', Current_Location)
 ], debug=True)

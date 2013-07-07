@@ -7,7 +7,7 @@ import requests
 #date = datetime.strptime(out_line[1].strip(), '%m/%d/%Y-%I/%M/%S.0') 
 data = {}
 url = 'http://www.arduinogpsproject.appspot.com/update'
-device = '/dev/tty.usbmodemfa131'
+device = '/dev/tty.usbmodemfd121'
 arduino = serial.Serial(device, 4800)
 while 1:
 	arduino.flushInput()
